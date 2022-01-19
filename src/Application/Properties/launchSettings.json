@@ -27,7 +27,7 @@
         "MIGRATION": "APLICAR",
         "Audience": "ExemploAudience",
         "Issuer": "ExemploIssuer",
-        "Seconds": "1200"
+        "Seconds": "12000"
       }
     }
   }

@@ -19,7 +19,7 @@ namespace CrossCutting.DependencyInjection
     public class ConfigureRepository
     {
 
-        public static void ConfigureDependencyRepository(IServiceCollection serviceCollection, IConfiguration configuration)
+        public static void ConfigureDependencyRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             serviceCollection.AddScoped<IUserRepository, UserImplementation>();

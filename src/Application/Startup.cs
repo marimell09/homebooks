@@ -28,8 +28,6 @@ namespace Application
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment _environment { get; }
 
-        public static IConfiguration StaticConfig { get; private set; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -45,7 +43,7 @@ namespace Application
             }
 
             ConfigureService.ConfigureDependenciesService(services);
-            ConfigureRepository.ConfigureDependencyRepository(services, Configuration);
+            ConfigureRepository.ConfigureDependencyRepository(services);
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {

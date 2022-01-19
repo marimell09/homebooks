@@ -15,14 +15,6 @@ namespace Application
     {
     public static void Main(string[] args)
     {
-
-         var config =
-        new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", true)
-        .AddEnvironmentVariables()
-        .Build();
-
             //CreateHostBuilder(args).Build().Run();
             CreateWebHostBuilder(args).Build().Run();
     }

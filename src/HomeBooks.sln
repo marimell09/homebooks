@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{80FC8C9B-B03D-4158-8742-5AAC071A9A13}"
-	ProjectSection(SolutionItems) = preProject
-		config.env = config.env
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{039B18C2-4BD8-4AC2-A98E-EA4CE09A5D8A}"
 EndProject
