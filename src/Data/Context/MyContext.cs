@@ -1,12 +1,13 @@
 ﻿using System;
 using Data.Mapping;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Infra.Data.Context
 {
-	public class MyContext : DbContext
+	public class MyContext : IdentityDbContext
 	{
         public DbSet<UserEntity> Users { get; set; }
 

@@ -9,6 +9,6 @@ namespace Domain.Interfaces.User
 {
     public interface ILoginService
     {
-        Task<object> FindByLogin(LoginDto user);
+        Task<object> FindByLogin(UserLoginRequestDto user);
     }
 }

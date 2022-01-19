@@ -7,13 +7,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Application
 {
@@ -31,6 +34,7 @@ namespace Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
 
             if (_environment.IsEnvironment("Testing"))
             {
@@ -61,17 +65,32 @@ namespace Application
             services.AddAuthentication(authOptions =>
             {
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(bearerOptions =>
             {
-                var paramsValidation = bearerOptions.TokenValidationParameters;
-                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
-                paramsValidation.ValidAudience = Environment.GetEnvironmentVariable("Audience");
-                paramsValidation.ValidIssuer = Environment.GetEnvironmentVariable("Issuer");
-                paramsValidation.ValidateIssuerSigningKey = true;
-                paramsValidation.ValidateLifetime = true;
-                paramsValidation.ClockSkew = TimeSpan.Zero;
+                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+                bearerOptions.SaveToken = true;
+                bearerOptions.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    RequireExpirationTime = false
+                };
+                //var paramsValidation = bearerOptions.TokenValidationParameters;
+                //paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                //paramsValidation.ValidAudience = Environment.GetEnvironmentVariable("Audience");
+                //paramsValidation.ValidIssuer = Environment.GetEnvironmentVariable("Issuer");
+                //paramsValidation.ValidateIssuerSigningKey = true;
+                //paramsValidation.ValidateLifetime = true;
+                //paramsValidation.ClockSkew = TimeSpan.Zero;
             });
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<MyContext>();
 
             services.AddAuthorization(auth =>
             {

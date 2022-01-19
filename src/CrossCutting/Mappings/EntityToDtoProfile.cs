@@ -16,7 +16,7 @@ namespace CrossCutting.Mappings
             CreateMap<UserDto, UserEntity>()
               .ReverseMap();
 
-            CreateMap<UserDtoCreateResult, UserEntity>()
+            CreateMap<UserRegistrationResponseDto, UserEntity>()
               .ReverseMap();
 
             CreateMap<UserDtoUpdateResult, UserEntity>()

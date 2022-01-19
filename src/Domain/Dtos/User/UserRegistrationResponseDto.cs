@@ -1,8 +1,9 @@
+using Domain.Security;
 using System;
 
 namespace Domain.Dtos.User
 {
-    public class UserDtoCreateResult
+    public class UserRegistrationResponseDto : AuthResult
     {
         public Guid Id { get; set; }
 

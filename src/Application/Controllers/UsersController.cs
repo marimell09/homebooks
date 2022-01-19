@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Interfaces.User;
 using Domain.Dtos.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : ControllerBase
     {
 
@@ -20,7 +22,6 @@ namespace Application.Controllers
             _service = service;
         }
 
-        [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -39,7 +40,6 @@ namespace Application.Controllers
             }
         }
 
-        [Authorize("Bearer")]
         [HttpGet]
         [Route("{id}", Name = "GetWithId")]
         public async Task<ActionResult> Get(Guid id)
@@ -66,7 +66,7 @@ namespace Application.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserDtoCreate user)
+        public async Task<ActionResult> Post([FromBody] UserRegistrationDto user)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +91,6 @@ namespace Application.Controllers
             }
         }
 
-        [Authorize("Bearer")]
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] UserDtoUpdate user)
         {
@@ -118,7 +117,6 @@ namespace Application.Controllers
             }
         }
 
-        [Authorize("Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
