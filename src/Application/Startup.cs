@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,8 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Application
 {
@@ -30,6 +27,8 @@ namespace Application
 
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment _environment { get; }
+
+        public static IConfiguration StaticConfig { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -45,9 +44,8 @@ namespace Application
                 Environment.SetEnvironmentVariable("Seconds", "1200");
             }
 
-
             ConfigureService.ConfigureDependenciesService(services);
-            ConfigureRepository.ConfigureDependencyRepository(services);
+            ConfigureRepository.ConfigureDependencyRepository(services, Configuration);
 
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
