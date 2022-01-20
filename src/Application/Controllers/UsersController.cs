@@ -11,7 +11,7 @@ namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Consumer")]
     public class UsersController : ControllerBase
     {
 
@@ -23,6 +23,7 @@ namespace Application.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "DepartmentPolicy")]
         public async Task<ActionResult> GetAll()
         {
             if (!ModelState.IsValid)

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Security
+namespace Domain.Dtos.Token
 {
-    public class AuthResult
+    public class TokenRequest
     {
+        [Required]
         public string Token { get; set; }
+        [Required]
         public string RefreshToken { get; set; }
-        public bool Success { get; set; }
-        public List<string> Errors { get; set; }
     }
 }

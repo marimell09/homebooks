@@ -10,6 +10,7 @@ namespace Infra.Data.Context
 	public class MyContext : IdentityDbContext
 	{
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
         public MyContext(DbContextOptions<MyContext> options) : base(options) { }
 

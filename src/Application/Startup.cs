@@ -35,6 +35,17 @@ namespace Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+            var tokenValidationParams = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false
+            };
+            services.AddSingleton(tokenValidationParams);
 
             if (_environment.IsEnvironment("Testing"))
             {
@@ -69,27 +80,11 @@ namespace Application
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(bearerOptions =>
             {
-                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
                 bearerOptions.SaveToken = true;
-                bearerOptions.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    RequireExpirationTime = false
-                };
-                //var paramsValidation = bearerOptions.TokenValidationParameters;
-                //paramsValidation.IssuerSigningKey = signingConfigurations.Key;
-                //paramsValidation.ValidAudience = Environment.GetEnvironmentVariable("Audience");
-                //paramsValidation.ValidIssuer = Environment.GetEnvironmentVariable("Issuer");
-                //paramsValidation.ValidateIssuerSigningKey = true;
-                //paramsValidation.ValidateLifetime = true;
-                //paramsValidation.ClockSkew = TimeSpan.Zero;
+                bearerOptions.TokenValidationParameters = tokenValidationParams;
             });
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<MyContext>();
 
             services.AddAuthorization(auth =>
@@ -97,6 +92,9 @@ namespace Application
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                         .RequireAuthenticatedUser().Build());
+
+                auth.AddPolicy("DepartmentPolicy",
+                    policy => policy.RequireClaim("Department"));
             });
 
             services.AddControllers();
