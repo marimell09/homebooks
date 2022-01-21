@@ -1,4 +1,5 @@
-﻿using Domain.Security;
+﻿using Domain.Entities;
+using Domain.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,20 +15,20 @@ namespace Application.Controllers
     [ApiController]
     public class ClaimsSetupController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly MyContext _myContext;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _applicationContext;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AuthManagementController> _logger;
 
         public ClaimsSetupController(
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<AuthManagementController> logger,
-            MyContext myContext)
+            ApplicationDbContext applicationContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _myContext = myContext;
+            _applicationContext = applicationContext;
             _logger = logger;
         }
 

@@ -30,7 +30,7 @@ namespace Service.Services
 
         public async Task<object> FindByLogin(UserLoginRequestDto user)
         {
-            var baseUser = new UserEntity();
+            var baseUser = new ApplicationUser();
 
             if (user != null && !string.IsNullOrWhiteSpace(user.Email))
             {

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Dtos.User
@@ -15,5 +16,8 @@ namespace Domain.Dtos.User
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
     }
 }

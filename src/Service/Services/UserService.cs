@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class UserService : IUserService
+    public class UserService// : IUserService
     {
-
+        /*
         private IRepository<UserEntity> _repository;
         private readonly IMapper _mapper;
 
@@ -54,5 +54,6 @@ namespace Service.Services
             var result = await _repository.UpdateAsync(entity);
             return _mapper.Map<UserDtoUpdateResult>(result);
         }
+    }*/
     }
 }

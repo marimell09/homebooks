@@ -1,11 +1,19 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Domain.Entities
 {
-	public class UserEntity: BaseEntity
+	public class ApplicationUser: IdentityUser
 	{
-		public string Name { get; set; }
+		public DateTime DateOfBirth { get; set; }
 
-		public string Email { get; set; }
+        private DateTime? _createdAt;
+
+        public DateTime? CreatedAt
+        {
+            get { return _createdAt; }
+            set { _createdAt = (value == null ? DateTime.UtcNow : value); }
+        }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

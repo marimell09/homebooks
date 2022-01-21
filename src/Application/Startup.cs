@@ -1,6 +1,7 @@
 using AutoMapper;
 using CrossCutting.DependencyInjection;
 using CrossCutting.Mappings;
+using Domain.Entities;
 using Domain.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -34,6 +35,7 @@ namespace Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
             var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
             var tokenValidationParams = new TokenValidationParameters
@@ -46,6 +48,8 @@ namespace Application
                 RequireExpirationTime = false
             };
             services.AddSingleton(tokenValidationParams);
+
+            services.AddSingleton(Configuration);
 
             if (_environment.IsEnvironment("Testing"))
             {
@@ -84,8 +88,8 @@ namespace Application
                 bearerOptions.TokenValidationParameters = tokenValidationParams;
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<MyContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddAuthorization(auth =>
             {
@@ -168,7 +172,7 @@ namespace Application
                 using (var service = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
                                                               .CreateScope())
                 {
-                    using (var context = service.ServiceProvider.GetService<MyContext>())
+                    using (var context = service.ServiceProvider.GetService<ApplicationDbContext>())
                     {
                         context.Database.Migrate();
                     }

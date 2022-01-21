@@ -25,26 +25,26 @@ namespace Application.Controllers
     public class AuthManagementController : ControllerBase
     {
 
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtConfig _jwtConfig;
         private readonly TokenValidationParameters _tokenValidationParams;
-        private readonly MyContext _myContext;
+        private readonly ApplicationDbContext _applicationContext;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AuthManagementController> _logger;
 
         public AuthManagementController(
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParams,
             ILogger<AuthManagementController> logger,
-            MyContext myContext)
+            ApplicationDbContext applicationContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParams = tokenValidationParams;
-            _myContext = myContext;
+            _applicationContext = applicationContext;
             _logger = logger;
         }
 
@@ -67,7 +67,7 @@ namespace Application.Controllers
                     });
                 }
 
-                var newUser = new IdentityUser() { Email = user.Email, UserName = user.Name };
+                var newUser = new ApplicationUser() { Email = user.Email, UserName = user.Name, DateOfBirth = user.DateOfBirth, CreatedAt = null};
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
 
                 if (isCreated.Succeeded)
@@ -99,7 +99,7 @@ namespace Application.Controllers
             });
         }
 
-        private async Task<AuthResult> GenerateJwtToken(IdentityUser user)
+        private async Task<AuthResult> GenerateJwtToken(ApplicationUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -129,8 +129,8 @@ namespace Application.Controllers
 
             };
 
-            await _myContext.RefreshTokens.AddAsync(refreshToken);
-            await _myContext.SaveChangesAsync();
+            await _applicationContext.RefreshTokens.AddAsync(refreshToken);
+            await _applicationContext.SaveChangesAsync();
 
             return new AuthResult()
             {
@@ -143,7 +143,7 @@ namespace Application.Controllers
         /**
          * Get all valid claims for the corresponding user.
          */
-        private async Task<List<Claim>> GetAllValidClaims(IdentityUser user)
+        private async Task<List<Claim>> GetAllValidClaims(ApplicationUser user)
         {
             var claims = new List<Claim>
             {
@@ -301,7 +301,7 @@ namespace Application.Controllers
                 }
 
                 //Validation 4 - Validate existance of the token - exist in database
-                var storedToken = await _myContext.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.RefreshToken);
+                var storedToken = await _applicationContext.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokenRequest.RefreshToken);
 
                 if(storedToken == null)
                 {
@@ -359,8 +359,8 @@ namespace Application.Controllers
 
                 //update current token
                 storedToken.IsUsed = true;
-                _myContext.RefreshTokens.Update(storedToken);
-                await _myContext.SaveChangesAsync();
+                _applicationContext.RefreshTokens.Update(storedToken);
+                await _applicationContext.SaveChangesAsync();
 
                 //Generate a new token
                 var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);

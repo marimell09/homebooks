@@ -22,11 +22,11 @@ namespace CrossCutting.DependencyInjection
         public static void ConfigureDependencyRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            serviceCollection.AddScoped<IUserRepository, UserImplementation>();
+            //serviceCollection.AddScoped<IUserRepository, UserImplementation>();
 
    
 
-            serviceCollection.AddDbContext<MyContext>(
+            serviceCollection.AddDbContext<ApplicationDbContext>(
                 options => options.UseMySql(Environment.GetEnvironmentVariable("DB_CONNECTION"),
                  new MySqlServerVersion(new Version(8, 0, 21)),
                      mySqlOptions => mySqlOptions

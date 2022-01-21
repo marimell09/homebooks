@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Data.Mapping
 {
-    public class UserMap : IEntityTypeConfiguration<UserEntity>
+    public class UserMap : IEntityTypeConfiguration<ApplicationUser>
     {
-        public void Configure(EntityTypeBuilder<UserEntity> builder)
+        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.ToTable("User");
             //Cria chave primária
@@ -20,7 +20,7 @@ namespace Data.Mapping
             builder.HasIndex(u => u.Email)
                     .IsUnique();
 
-            builder.Property(u => u.Name)
+            builder.Property(u => u.UserName)
                     .IsRequired()
                     .HasMaxLength(60);
 

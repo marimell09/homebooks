@@ -1,19 +1,33 @@
-﻿using System;
+﻿using Data.Context;
 using Data.Mapping;
 using Domain.Entities;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Reflection;
 
 namespace Infra.Data.Context
 {
-	public class MyContext : IdentityDbContext
-	{
-        public DbSet<UserEntity> Users { get; set; }
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    {
         public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
-        public MyContext(DbContextOptions<MyContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            modelBuilder.ApplyConfiguration(new UsersWithRolesConfig());
+        }
+
+        /*
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -22,14 +36,13 @@ namespace Infra.Data.Context
             modelBuilder.Entity<UserEntity>().HasData(
               new UserEntity
               {
-                  Id = Guid.NewGuid(),
-                  Name = "Administrador",
+                  UserName = "Administrador",
                   Email = "admin@mail.com",
-                  CreateAt = DateTime.Now,
-                  UpdateAt = DateTime.Now
+                  CreatedAt = DateTime.Now,
+                  UpdatedAt = DateTime.Now
               }
             );
-        }
+        }*/
     }
 
 }

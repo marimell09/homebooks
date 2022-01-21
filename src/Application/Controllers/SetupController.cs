@@ -1,4 +1,5 @@
-﻿using Infra.Data.Context;
+﻿using Domain.Entities;
+using Infra.Data.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +14,19 @@ namespace Application.Controllers
     [Route("api/[controller]")] //api/setup
     public class SetupController : ControllerBase
     {
-        private readonly MyContext _myContext;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _applicationContext;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<SetupController> _logger;
 
         public SetupController(
-            MyContext myContext,
-            UserManager<IdentityUser> userManager,
+            ApplicationDbContext applicationContext,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<SetupController> logger)
         {
             _logger = logger;
-            _myContext = myContext;
+            _applicationContext = applicationContext;
             _userManager = userManager;
             _roleManager = roleManager;
         }

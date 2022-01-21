@@ -13,13 +13,13 @@ namespace CrossCutting.Mappings
     {
         public EntityToDtoProfile()
         {
-            CreateMap<UserDto, UserEntity>()
+            CreateMap<UserDto, ApplicationUser>()
               .ReverseMap();
 
-            CreateMap<UserRegistrationResponseDto, UserEntity>()
+            CreateMap<UserRegistrationResponseDto, ApplicationUser>()
               .ReverseMap();
 
-            CreateMap<UserDtoUpdateResult, UserEntity>()
+            CreateMap<UserDtoUpdateResult, ApplicationUser>()
               .ReverseMap();
         }
     }

@@ -10,13 +10,13 @@ namespace Infra.Data.Repository
 { 
 	public class BaseRepository<T> : IRepository<T> where T:BaseEntity
     {
-		protected readonly MyContext _context;
+		protected readonly ApplicationDbContext _applicationContext;
 		private DbSet<T> _dataset;
 
-        public BaseRepository(MyContext context)
+        public BaseRepository(ApplicationDbContext applicationContext)
         {
-            _context = context;
-            _dataset = _context.Set<T>();
+            _applicationContext = applicationContext;
+            _dataset = _applicationContext.Set<T>();
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -28,7 +28,7 @@ namespace Infra.Data.Repository
                     return false;
 
                 _dataset.Remove(result);
-                await _context.SaveChangesAsync();
+                await _applicationContext.SaveChangesAsync();
                 return true;
 
             }
@@ -50,7 +50,7 @@ namespace Infra.Data.Repository
                 item.CreateAt = DateTime.UtcNow;
                 _dataset.Add(item);
 
-                await _context.SaveChangesAsync();
+                await _applicationContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -100,8 +100,8 @@ namespace Infra.Data.Repository
                 item.UpdateAt = DateTime.UtcNow;
                 item.CreateAt = result.CreateAt;
 
-                _context.Entry(result).CurrentValues.SetValues(item);
-                await _context.SaveChangesAsync();
+                _applicationContext.Entry(result).CurrentValues.SetValues(item);
+                await _applicationContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
