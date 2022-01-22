@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class UserService : IUserService
+    public class UserService// : IUserService
     {
-
+        /*
         private IRepository<UserEntity> _repository;
         private readonly IMapper _mapper;
 
@@ -39,12 +39,12 @@ namespace Service.Services
             return _mapper.Map<IEnumerable<UserDto>>(entities);
         }
 
-        public async Task<UserDtoCreateResult> Post(UserDtoCreate user)
+        public async Task<UserRegistrationResponseDto> Post(UserRegistrationDto user)
         {
             var model = _mapper.Map<UserModel>(user);
             var entity = _mapper.Map<UserEntity>(model);
             var result = await _repository.InsertAsync(entity);
-            return _mapper.Map<UserDtoCreateResult>(result);
+            return _mapper.Map<UserRegistrationResponseDto>(result);
         }
 
         public async Task<UserDtoUpdateResult> Put(UserDtoUpdate user)
@@ -54,5 +54,6 @@ namespace Service.Services
             var result = await _repository.UpdateAsync(entity);
             return _mapper.Map<UserDtoUpdateResult>(result);
         }
+    }*/
     }
 }

@@ -28,9 +28,9 @@ namespace Service.Services
             _configuration = configuration;
         }
 
-        public async Task<object> FindByLogin(LoginDto user)
+        public async Task<object> FindByLogin(UserLoginRequestDto user)
         {
-            var baseUser = new UserEntity();
+            var baseUser = new ApplicationUser();
 
             if (user != null && !string.IsNullOrWhiteSpace(user.Email))
             {
@@ -71,7 +71,7 @@ namespace Service.Services
                 };
         }
 
-        private object SuccessObject(DateTime createDate, DateTime expirationDate, string token, LoginDto user)
+        private object SuccessObject(DateTime createDate, DateTime expirationDate, string token, UserLoginRequestDto user)
         {
             return new
             {

@@ -27,7 +27,9 @@
         "MIGRATION": "APLICAR",
         "Audience": "ExemploAudience",
         "Issuer": "ExemploIssuer",
-        "Seconds": "12000"
+        "Seconds": "12000",
+        "AdminPassword": "Admin123!",
+        "AdminEmail": "marimello619@gmail.com"
       }
     }
   }

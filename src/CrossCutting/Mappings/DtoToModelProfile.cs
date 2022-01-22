@@ -16,7 +16,7 @@ namespace CrossCutting.Mappings
             #region User
             CreateMap<UserModel, UserDto>()
               .ReverseMap();
-            CreateMap<UserModel, UserDtoCreate>()
+            CreateMap<UserModel, UserRegistrationDto>()
               .ReverseMap();
             CreateMap<UserModel, UserDtoUpdate>()
               .ReverseMap();

@@ -1,8 +1,9 @@
+using Domain.Security;
 using System;
 
 namespace Domain.Dtos.User
 {
-    public class UserDtoCreateResult
+    public class UserRegistrationResponseDto : AuthResult
     {
         public Guid Id { get; set; }
 
@@ -10,6 +11,6 @@ namespace Domain.Dtos.User
 
         public string Email { get; set; }
 
-        public DateTime CreateAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

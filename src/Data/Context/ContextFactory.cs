@@ -5,18 +5,18 @@ using System;
 
 namespace Infra.Data.Context
 {
-	public class ContextFactory : IDesignTimeDbContextFactory<MyContext>
+	public class ContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 	{
-		public MyContext CreateDbContext(string[] args)
+		public ApplicationDbContext CreateDbContext(string[] args)
 		{
             var connectionString = "Server=localhost;Port=3306;Database=dbAPI;Uid=root;Pwd=dracula1!";
 
-            var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21)),
               mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)
             );
 
-            return new MyContext(optionsBuilder.Options);
+            return new ApplicationDbContext(optionsBuilder.Options);
         }
 	}
 }

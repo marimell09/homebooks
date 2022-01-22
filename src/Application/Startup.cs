@@ -1,19 +1,23 @@
 using AutoMapper;
 using CrossCutting.DependencyInjection;
 using CrossCutting.Mappings;
+using Domain.Entities;
 using Domain.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Application
 {
@@ -31,6 +35,21 @@ namespace Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+            var tokenValidationParams = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false
+            };
+            services.AddSingleton(tokenValidationParams);
+
+            services.AddSingleton(Configuration);
 
             if (_environment.IsEnvironment("Testing"))
             {
@@ -61,23 +80,25 @@ namespace Application
             services.AddAuthentication(authOptions =>
             {
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(bearerOptions =>
             {
-                var paramsValidation = bearerOptions.TokenValidationParameters;
-                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
-                paramsValidation.ValidAudience = Environment.GetEnvironmentVariable("Audience");
-                paramsValidation.ValidIssuer = Environment.GetEnvironmentVariable("Issuer");
-                paramsValidation.ValidateIssuerSigningKey = true;
-                paramsValidation.ValidateLifetime = true;
-                paramsValidation.ClockSkew = TimeSpan.Zero;
+                bearerOptions.SaveToken = true;
+                bearerOptions.TokenValidationParameters = tokenValidationParams;
             });
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                         .RequireAuthenticatedUser().Build());
+
+                auth.AddPolicy("DepartmentPolicy",
+                    policy => policy.RequireClaim("Department"));
             });
 
             services.AddControllers();
@@ -151,7 +172,7 @@ namespace Application
                 using (var service = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
                                                               .CreateScope())
                 {
-                    using (var context = service.ServiceProvider.GetService<MyContext>())
+                    using (var context = service.ServiceProvider.GetService<ApplicationDbContext>())
                     {
                         context.Database.Migrate();
                     }

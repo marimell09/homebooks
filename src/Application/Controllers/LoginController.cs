@@ -14,7 +14,7 @@ namespace Application.Controllers
     {
         [AllowAnonymous]
         [HttpPost]
-        public async Task<object> Login([FromBody] LoginDto loginDto, [FromServices] ILoginService service)
+        public async Task<object> Login([FromBody] UserLoginRequestDto loginDto, [FromServices] ILoginService service)
         {
             if (!ModelState.IsValid)
             {
