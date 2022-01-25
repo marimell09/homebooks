@@ -5,6 +5,15 @@ namespace Domain.Models
 {
     public class UserModel: IdentityUser
     {
+        private string _firstName;
+
+        public string FirstName
+        {
+            get { return _firstName; }
+            set { _firstName = value; }
+        }
+
+
         private DateTime _dateOfBirth;
         public DateTime DateOfBirth
         {

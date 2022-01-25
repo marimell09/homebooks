@@ -50,8 +50,8 @@ namespace Service.Services
                       new GenericIdentity(baseUser.Email),
                       new[]
                       {
-              new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //jti o id do token
-              new Claim(JwtRegisteredClaimNames.UniqueName, user.Email)
+                          new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //jti o id do token
+                          new Claim(JwtRegisteredClaimNames.UniqueName, user.Email)
                       }
                     );
 

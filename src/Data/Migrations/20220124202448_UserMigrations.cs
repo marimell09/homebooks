@@ -27,6 +27,8 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    FirstName = table.Column<string>(type: "longtext", nullable: true),
+                    LastName = table.Column<string>(type: "longtext", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -186,15 +188,15 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2301D884-221A-4E7D-B509-0113DCC043E1", "379ada32-b28a-402f-8fde-be7f39624850", "Administrator", "ADMINISTRATOR" },
-                    { "78A7570F-3CE5-48BA-9461-80283ED1D94D", "cc30c124-aeb3-4c9d-a37d-933ec3d93561", "Seller", "SELLER" },
-                    { "01B168FE-810B-432D-9010-233BA0B380E9", "6250a594-ff15-4db8-a6b0-a331447f8ef2", "Customer", "CUSTOMER" }
+                    { "2301D884-221A-4E7D-B509-0113DCC043E1", "4b8ea8fa-d41b-43b2-8677-b2513510a16a", "Administrator", "ADMINISTRATOR" },
+                    { "78A7570F-3CE5-48BA-9461-80283ED1D94D", "acce1f3e-e65b-4e86-acde-8ad4ebc4f0f3", "Seller", "SELLER" },
+                    { "01B168FE-810B-432D-9010-233BA0B380E9", "6aade69c-f2e3-4c29-ace2-6dbaeb263ae1", "Customer", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "DateOfBirth", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
-                values: new object[] { "B22698B8-42A2-4115-9631-1C2D1E2AC5F7", 0, "dc919ad1-8c27-4698-ae82-1ebf056862c1", new DateTime(2022, 1, 21, 21, 58, 55, 192, DateTimeKind.Utc).AddTicks(2629), new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "marimello619@gmail.com", true, false, null, "MARIMELLO619@GMAIL.COM", "MASTERADMIN", "AQAAAAEAACcQAAAAEJS7B/zg/Kg2/L9Wmwr561zUbuteaPg//XeMrLwVvRTaI3mwaqqjl2iHYy0CnuA/fw==", "XXXXXXXXXXXXX", true, "00000000-0000-0000-0000-000000000000", false, new DateTime(2022, 1, 21, 21, 58, 55, 192, DateTimeKind.Utc).AddTicks(3145), "masteradmin" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
+                values: new object[] { "B22698B8-42A2-4115-9631-1C2D1E2AC5F7", 0, "656ae3d4-6097-4c09-aff0-be988350d919", new DateTime(2022, 1, 24, 20, 24, 48, 164, DateTimeKind.Utc).AddTicks(126), new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "teste@gmail.com", true, "Admin", "Last Name", false, null, "TESTE@GMAIL.COM", "MASTERADMIN", "AQAAAAEAACcQAAAAEO/3FAnc09vAm5tRjZnItx0zm8XppAD2D0QmpIY9tm5aJSetd94kDgUHRn4zgbYGtw==", "XXXXXXXXXXXXX", true, "00000000-0000-0000-0000-000000000000", false, null, "masteradmin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

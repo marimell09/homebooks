@@ -45,7 +45,8 @@ namespace Application
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
-                RequireExpirationTime = false
+                RequireExpirationTime = true,
+                ClockSkew = TimeSpan.Zero
             };
             services.AddSingleton(tokenValidationParams);
 

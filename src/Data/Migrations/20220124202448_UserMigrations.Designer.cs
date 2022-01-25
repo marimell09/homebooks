@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220121215855_UserMigrations")]
+    [Migration("20220124202448_UserMigrations")]
     partial class UserMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,12 @@ namespace Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -96,20 +102,21 @@ namespace Data.Migrations
                         {
                             Id = "B22698B8-42A2-4115-9631-1C2D1E2AC5F7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dc919ad1-8c27-4698-ae82-1ebf056862c1",
-                            CreatedAt = new DateTime(2022, 1, 21, 21, 58, 55, 192, DateTimeKind.Utc).AddTicks(2629),
+                            ConcurrencyStamp = "656ae3d4-6097-4c09-aff0-be988350d919",
+                            CreatedAt = new DateTime(2022, 1, 24, 20, 24, 48, 164, DateTimeKind.Utc).AddTicks(126),
                             DateOfBirth = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "marimello619@gmail.com",
+                            Email = "teste@gmail.com",
                             EmailConfirmed = true,
+                            FirstName = "Admin",
+                            LastName = "Last Name",
                             LockoutEnabled = false,
-                            NormalizedEmail = "MARIMELLO619@GMAIL.COM",
+                            NormalizedEmail = "TESTE@GMAIL.COM",
                             NormalizedUserName = "MASTERADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJS7B/zg/Kg2/L9Wmwr561zUbuteaPg//XeMrLwVvRTaI3mwaqqjl2iHYy0CnuA/fw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO/3FAnc09vAm5tRjZnItx0zm8XppAD2D0QmpIY9tm5aJSetd94kDgUHRn4zgbYGtw==",
                             PhoneNumber = "XXXXXXXXXXXXX",
                             PhoneNumberConfirmed = true,
                             SecurityStamp = "00000000-0000-0000-0000-000000000000",
                             TwoFactorEnabled = false,
-                            UpdatedAt = new DateTime(2022, 1, 21, 21, 58, 55, 192, DateTimeKind.Utc).AddTicks(3145),
                             UserName = "masteradmin"
                         });
                 });
@@ -177,21 +184,21 @@ namespace Data.Migrations
                         new
                         {
                             Id = "2301D884-221A-4E7D-B509-0113DCC043E1",
-                            ConcurrencyStamp = "379ada32-b28a-402f-8fde-be7f39624850",
+                            ConcurrencyStamp = "4b8ea8fa-d41b-43b2-8677-b2513510a16a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "78A7570F-3CE5-48BA-9461-80283ED1D94D",
-                            ConcurrencyStamp = "cc30c124-aeb3-4c9d-a37d-933ec3d93561",
+                            ConcurrencyStamp = "acce1f3e-e65b-4e86-acde-8ad4ebc4f0f3",
                             Name = "Seller",
                             NormalizedName = "SELLER"
                         },
                         new
                         {
                             Id = "01B168FE-810B-432D-9010-233BA0B380E9",
-                            ConcurrencyStamp = "6250a594-ff15-4db8-a6b0-a331447f8ef2",
+                            ConcurrencyStamp = "6aade69c-f2e3-4c29-ace2-6dbaeb263ae1",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });

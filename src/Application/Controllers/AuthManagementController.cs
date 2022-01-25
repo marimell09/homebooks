@@ -54,8 +54,8 @@ namespace Application.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingUser = await _userManager.FindByEmailAsync(user.Email);
-                if (existingUser != null)
+                var existingEmail = await _userManager.FindByEmailAsync(user.Email);
+                if (existingEmail != null)
                 {
                     return BadRequest(new UserRegistrationResponseDto()
                     {
@@ -67,13 +67,35 @@ namespace Application.Controllers
                     });
                 }
 
-                var newUser = new ApplicationUser() { Email = user.Email, UserName = user.Name, DateOfBirth = user.DateOfBirth, CreatedAt = null};
+                var existingUsername = await _userManager.FindByNameAsync(user.UserName);
+                if (existingEmail != null)
+                {
+                    return BadRequest(new UserRegistrationResponseDto()
+                    {
+                        Errors = new List<string>()
+                        {
+                            "Username already in use"
+                        },
+                        Success = false
+                    });
+                }
+
+
+                var newUser = new ApplicationUser() {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    DateOfBirth = user.BirthDate,
+                    CreatedAt = null
+                };
+
                 var isCreated = await _userManager.CreateAsync(newUser, user.Password);
 
                 if (isCreated.Succeeded)
                 {
 
-                    await _userManager.AddToRoleAsync(newUser, "Consumer");
+                    await _userManager.AddToRoleAsync(newUser, "Customer");
 
                     var jwtToken = await GenerateJwtToken(newUser);
 
@@ -110,7 +132,7 @@ namespace Application.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddSeconds(30),
+                Expires = DateTime.UtcNow.AddSeconds(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

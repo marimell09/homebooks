@@ -18,11 +18,13 @@ namespace Data.Context
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
 
-            string adminEmail = "admin";
+            string adminEmail = "teste@gmail.com";
 
             ApplicationUser admin = new ApplicationUser
             {
                 Id = adminId,
+                FirstName = "Admin",
+                LastName = "Last Name",
                 UserName = "masteradmin",
                 NormalizedUserName = "MASTERADMIN",
                 Email = adminEmail.ToString(),
@@ -33,7 +35,7 @@ namespace Data.Context
                 DateOfBirth = new DateTime(1980, 1, 1),
                 SecurityStamp = new Guid().ToString("D"),
                 CreatedAt = null,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = null
             };
 
             admin.PasswordHash = PassGenerate(admin);
@@ -43,7 +45,7 @@ namespace Data.Context
 
         public string PassGenerate(ApplicationUser user)
         {
-            string adminPassword = "Teste123!";
+            string adminPassword = "Senha123!";
             var passHash = new PasswordHasher<ApplicationUser>();
             return passHash.HashPassword(user, adminPassword);
         }
