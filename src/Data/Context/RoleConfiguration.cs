@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 
 namespace Data.Context
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole<Guid>>
     {
-        private const string adminId = "2301D884-221A-4E7D-B509-0113DCC043E1";
-        private const string sellerId = "78A7570F-3CE5-48BA-9461-80283ED1D94D";
-        private const string customerId = "01B168FE-810B-432D-9010-233BA0B380E9";
+        private Guid adminId = Guid.Parse("2301D884-221A-4E7D-B509-0113DCC043E1");
+        private Guid sellerId = Guid.Parse("78A7570F-3CE5-48BA-9461-80283ED1D94D");
+        private Guid customerId = Guid.Parse("01B168FE-810B-432D-9010-233BA0B380E9");
 
-        public void Configure(EntityTypeBuilder<IdentityRole> builder)
+        public void Configure(EntityTypeBuilder<IdentityRole<Guid>> builder)
         {
 
             builder.HasData(
-                    new IdentityRole
+                    new IdentityRole<Guid>
                     {
                         Id = adminId,
                         Name = "Administrator",
                         NormalizedName = "ADMINISTRATOR"
                     },
-                    new IdentityRole
+                    new IdentityRole<Guid>
                     {
                         Id = sellerId,
                         Name = "Seller",
                         NormalizedName = "SELLER"
                     },
-                    new IdentityRole
+                    new IdentityRole<Guid>
                     {
                         Id = customerId,
                         Name = "Customer",

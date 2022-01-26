@@ -12,7 +12,7 @@ namespace Data.Context
     public class AdminConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {
 
-        private const string adminId = "B22698B8-42A2-4115-9631-1C2D1E2AC5F7";
+        private Guid adminId = Guid.Parse("B22698B8-42A2-4115-9631-1C2D1E2AC5F7");
 
 
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)

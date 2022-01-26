@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -20,12 +21,12 @@ namespace Application.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _applicationContext;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly ILogger<AuthManagementController> _logger;
 
         public ClaimsSetupController(
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<IdentityRole<Guid>> roleManager,
             ILogger<AuthManagementController> logger,
             ApplicationDbContext applicationContext)
         {

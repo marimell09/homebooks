@@ -29,12 +29,12 @@ namespace Application.Controllers
         private readonly JwtConfig _jwtConfig;
         private readonly TokenValidationParameters _tokenValidationParams;
         private readonly ApplicationDbContext _applicationContext;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly ILogger<AuthManagementController> _logger;
 
         public AuthManagementController(
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<IdentityRole<Guid>> roleManager,
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParams,
             ILogger<AuthManagementController> logger,
@@ -169,7 +169,7 @@ namespace Application.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim("Id", user.Id),
+                new Claim("Id", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -385,7 +385,7 @@ namespace Application.Controllers
                 await _applicationContext.SaveChangesAsync();
 
                 //Generate a new token
-                var dbUser = await _userManager.FindByIdAsync(storedToken.UserId);
+                var dbUser = await _userManager.FindByIdAsync(storedToken.UserId.ToString());
                 return await GenerateJwtToken(dbUser);
             }
             catch(Exception ex)

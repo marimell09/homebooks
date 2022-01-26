@@ -1,38 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 
 namespace Domain.Models
 {
-    public class UserModel: IdentityUser
+    public class UserModel: ApplicationUser
     {
-        private string _firstName;
-
-        public string FirstName
-        {
-            get { return _firstName; }
-            set { _firstName = value; }
-        }
-
-
-        private DateTime _dateOfBirth;
-        public DateTime DateOfBirth
-        {
-            get { return _dateOfBirth; }
-            set { _dateOfBirth = value; }
-        }
-
-        private DateTime? _createdAt;
-        public DateTime? CreatedAt
-        {
-            get { return _createdAt; }
-            set { _createdAt = (value == null ? DateTime.UtcNow : value); }
-        }
-
-        private DateTime _updatedAt;
-        public DateTime UpdatedAt
-        {
-            get { return _updatedAt; }
-            set { _updatedAt = value; }
-        }
     }
 }

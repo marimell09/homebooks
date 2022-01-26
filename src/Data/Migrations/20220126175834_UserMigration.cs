@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class UserMigrations : Migration
+    public partial class UserMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Data.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true)
@@ -26,7 +26,7 @@ namespace Data.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     FirstName = table.Column<string>(type: "longtext", nullable: true),
                     LastName = table.Column<string>(type: "longtext", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -58,7 +58,7 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "char(36)", nullable: false),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true),
                     ClaimValue = table.Column<string>(type: "longtext", nullable: true)
                 },
@@ -79,7 +79,7 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true),
                     ClaimValue = table.Column<string>(type: "longtext", nullable: true)
                 },
@@ -101,7 +101,7 @@ namespace Data.Migrations
                     LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false),
                     ProviderKey = table.Column<string>(type: "varchar(255)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,8 +118,8 @@ namespace Data.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,7 +142,7 @@ namespace Data.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false),
                     LoginProvider = table.Column<string>(type: "varchar(255)", nullable: false),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
                     Value = table.Column<string>(type: "longtext", nullable: true)
@@ -164,7 +164,7 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(type: "varchar(255)", nullable: true),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false),
                     Token = table.Column<string>(type: "longtext", nullable: true),
                     JwtId = table.Column<string>(type: "longtext", nullable: true),
                     IsUsed = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -180,7 +180,7 @@ namespace Data.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -188,20 +188,20 @@ namespace Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2301D884-221A-4E7D-B509-0113DCC043E1", "4b8ea8fa-d41b-43b2-8677-b2513510a16a", "Administrator", "ADMINISTRATOR" },
-                    { "78A7570F-3CE5-48BA-9461-80283ED1D94D", "acce1f3e-e65b-4e86-acde-8ad4ebc4f0f3", "Seller", "SELLER" },
-                    { "01B168FE-810B-432D-9010-233BA0B380E9", "6aade69c-f2e3-4c29-ace2-6dbaeb263ae1", "Customer", "CUSTOMER" }
+                    { new Guid("2301d884-221a-4e7d-b509-0113dcc043e1"), "10eab91b-7248-4327-94fb-7d839a4a94c1", "Administrator", "ADMINISTRATOR" },
+                    { new Guid("78a7570f-3ce5-48ba-9461-80283ed1d94d"), "f3c31595-4092-49eb-bc62-a48f50aa6373", "Seller", "SELLER" },
+                    { new Guid("01b168fe-810b-432d-9010-233ba0b380e9"), "044f4b06-a804-462b-afe0-c38e855e2501", "Customer", "CUSTOMER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "CreatedAt", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName" },
-                values: new object[] { "B22698B8-42A2-4115-9631-1C2D1E2AC5F7", 0, "656ae3d4-6097-4c09-aff0-be988350d919", new DateTime(2022, 1, 24, 20, 24, 48, 164, DateTimeKind.Utc).AddTicks(126), new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "teste@gmail.com", true, "Admin", "Last Name", false, null, "TESTE@GMAIL.COM", "MASTERADMIN", "AQAAAAEAACcQAAAAEO/3FAnc09vAm5tRjZnItx0zm8XppAD2D0QmpIY9tm5aJSetd94kDgUHRn4zgbYGtw==", "XXXXXXXXXXXXX", true, "00000000-0000-0000-0000-000000000000", false, null, "masteradmin" });
+                values: new object[] { new Guid("b22698b8-42a2-4115-9631-1c2d1e2ac5f7"), 0, "3310e7d1-d2cb-457b-a28c-d002c56b4d19", new DateTime(2022, 1, 26, 17, 58, 33, 713, DateTimeKind.Utc).AddTicks(5087), new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "teste@gmail.com", true, "Admin", "Last Name", false, null, "TESTE@GMAIL.COM", "MASTERADMIN", "AQAAAAEAACcQAAAAENOIV1OrIgcHsyzqVS6as8ZGQEOM8Jo/aoiVLIFtoAtw9VW4VesJpXMSWFRrvRlrZA==", "XXXXXXXXXXXXX", true, "00000000-0000-0000-0000-000000000000", false, null, "masteradmin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "2301D884-221A-4E7D-B509-0113DCC043E1", "B22698B8-42A2-4115-9631-1C2D1E2AC5F7" });
+                values: new object[] { new Guid("2301d884-221a-4e7d-b509-0113dcc043e1"), new Guid("b22698b8-42a2-4115-9631-1c2d1e2ac5f7") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

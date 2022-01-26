@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace Infra.Data.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
@@ -26,23 +26,5 @@ namespace Infra.Data.Context
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
             modelBuilder.ApplyConfiguration(new UsersWithRolesConfig());
         }
-
-        /*
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<UserEntity>(new UserMap().Configure);
-
-            modelBuilder.Entity<UserEntity>().HasData(
-              new UserEntity
-              {
-                  UserName = "Administrador",
-                  Email = "admin@mail.com",
-                  CreatedAt = DateTime.Now,
-                  UpdatedAt = DateTime.Now
-              }
-            );
-        }*/
     }
-
 }

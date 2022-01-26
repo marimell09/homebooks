@@ -89,8 +89,9 @@ namespace Application
                 bearerOptions.TokenValidationParameters = tokenValidationParams;
             });
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
             services.AddAuthorization(auth =>
             {
