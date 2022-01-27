@@ -10,5 +10,6 @@ namespace Domain.Repository
 {
     public interface IAddressRepository : IRepository<AddressEntity>
     {
+        Task<IEnumerable<AddressEntity>> FindAddressesByLogin(Guid userId);
     }
 }

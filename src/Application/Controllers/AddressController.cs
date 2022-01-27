@@ -1,30 +1,43 @@
-﻿using Domain.Dtos.Address;
+﻿using CrossCutting.Exceptions;
+using Domain.Dtos.Address;
+using Domain.Entities;
 using Domain.Interfaces.Address;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Customer")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AddressController : ControllerBase
     {
 
         private IAddressService _service;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private ILogger<AddressController> _logger;
 
-        public AddressController(IAddressService service)
+        public AddressController(IAddressService service, UserManager<ApplicationUser> userManager, ILogger<AddressController> logger)
         {
             _service = service;
+            _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> GetAll()
         {
             if (!ModelState.IsValid)
@@ -42,6 +55,40 @@ namespace Application.Controllers
 
                 return NotFound();
             }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogInformation(e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("userId", Name = "GetAddressesWithUserId")]
+        [Authorize(Roles = "Administrator,Customer,Seller")]
+        public async Task<ActionResult> GetAddressesByUserId(Guid userId)
+        {
+            try
+            {
+                isModelValid();
+                isAuthorized(userId);
+                var addresses = await _service.FindAddressesByLogin(userId);
+                if (addresses.Any())
+                {
+                    return Ok(addresses);
+                }
+
+                return NotFound();
+            }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+
+            }
             catch (ArgumentException e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
@@ -50,22 +97,25 @@ namespace Application.Controllers
 
         [HttpGet]
         [Route("id", Name = "GetAddressWithId")]
+        [Authorize(Roles = "Administrator,Customer,Seller")]
         public async Task<ActionResult> Get(Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
+                isModelValid();
                 var result = await _service.Get(id);
                 if (result == null)
                 {
                     return NotFound();
 
                 }
-                return Ok(await _service.Get(id));
+                isAuthorized(result.UserId);
+                return Ok(result);
+            }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+
             }
             catch (ArgumentException e)
             {
@@ -74,21 +124,25 @@ namespace Application.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator,Customer,Seller")]
         public async Task<ActionResult> Post([FromBody] AddressCreateDto address)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+            isModelValid();
             try
             {
+                isAuthorized(address.UserId);
+
                 var result = await _service.Post(address);
                 if (result == null)
                 {
                     return BadRequest();
                 }
                 return Created(new Uri(Url.Link("GetAddressWithId", new { id = result.Id })), result);
+            }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+
             }
             catch (ArgumentException e)
             {
@@ -97,15 +151,13 @@ namespace Application.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Administrator,Customer,Seller")]
         public async Task<ActionResult> Put([FromBody] AddressUpdateDto address)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
+                isModelValid();
+                isAuthorized(address.UserId);
                 var result = await _service.Put(address);
                 if (result == null)
                 {
@@ -114,27 +166,64 @@ namespace Application.Controllers
                 return Ok(result);
 
             }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+
+            }
+            catch (ArgumentException e)
+            {
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator,Customer,Seller")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            try
+            {
+                isModelValid();
+
+                AddressDto address = await _service.Get(id);
+                isAuthorized(address.UserId);
+
+                await _service.Delete(id);
+                return NoContent();
+            }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+
+            }
             catch (ArgumentException e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        private void isModelValid()
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                throw new ApiException
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Reason = "The user is not allowed to perform this action."
+                };
             }
+        }
 
-            try
+        private void isAuthorized(Guid actionUserId)
+        {
+            var loggedUserId = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            if (Guid.Parse(loggedUserId) != actionUserId)
             {
-                return Ok(await _service.Delete(id));
-            }
-            catch (ArgumentException e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+                throw new ApiException {
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    Reason = "The user is not allowed to perform this action."
+                };
             }
         }
     }

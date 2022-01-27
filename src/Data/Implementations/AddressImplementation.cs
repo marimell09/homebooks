@@ -19,5 +19,10 @@ namespace Data.Implementations
         {
             _dataset = context.Set<AddressEntity>();
         }
+
+        public async Task<IEnumerable<AddressEntity>> FindAddressesByLogin(Guid userId)
+        {
+            return await _dataset.Where(address => address.UserId.Equals(userId)).ToListAsync();
+        }
     }
 }

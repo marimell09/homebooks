@@ -15,5 +15,6 @@ namespace Domain.Interfaces.Address
         Task<AddressCreateResponseDto> Post(AddressCreateDto user);
         Task<AddressUpdateResponseDto> Put(AddressUpdateDto user);
         Task<bool> Delete(Guid id);
+        Task<IEnumerable<AddressDto>> FindAddressesByLogin(Guid userId);
     }
 }

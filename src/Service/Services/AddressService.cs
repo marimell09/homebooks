@@ -4,6 +4,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Interfaces.Address;
 using Domain.Models;
+using Domain.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,15 @@ namespace Service.Services
     public class AddressService : IAddressService
     {
         private IRepository<AddressEntity> _repository;
+        private IAddressRepository _addressRepository;
         private readonly IMapper _mapper;
-        public AddressService(IRepository<AddressEntity> repository, IMapper mapper)
+        public AddressService(
+            IRepository<AddressEntity> repository,
+            IAddressRepository addressRepository,
+            IMapper mapper)
         {
             _repository = repository;
+            _addressRepository = addressRepository;
             _mapper = mapper;
         }
 
@@ -53,6 +59,12 @@ namespace Service.Services
             var entity = _mapper.Map<AddressEntity>(model);
             var result = await _repository.UpdateAsync(entity);
             return _mapper.Map<AddressUpdateResponseDto>(result);
+        }
+
+        public async Task<IEnumerable<AddressDto>> FindAddressesByLogin(Guid userId)
+        {
+            var entities = await _addressRepository.FindAddressesByLogin(userId);
+            return _mapper.Map<IEnumerable<AddressDto>>(entities);
         }
     }
 }
