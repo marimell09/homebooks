@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Dtos.Address;
 using Domain.Dtos.User;
 using Domain.Entities;
 using System;
@@ -13,6 +14,7 @@ namespace CrossCutting.Mappings
     {
         public EntityToDtoProfile()
         {
+            #region User
             CreateMap<UserDto, ApplicationUser>()
               .ReverseMap();
 
@@ -21,6 +23,18 @@ namespace CrossCutting.Mappings
 
             CreateMap<UserDtoUpdateResult, ApplicationUser>()
               .ReverseMap();
+            #endregion
+
+            #region Address
+            CreateMap<AddressDto, AddressEntity>()
+                .ReverseMap();
+
+            CreateMap<AddressCreateResponseDto, AddressEntity>()
+                .ReverseMap();
+
+            CreateMap<AddressUpdateResponseDto, AddressEntity>()
+                .ReverseMap();
+            #endregion
         }
     }
 }

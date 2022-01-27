@@ -157,7 +157,7 @@ namespace Application
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curso de API com .NetCore3.1/.Net5.0");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ILivraria .Net5.0");
                 c.RoutePrefix = string.Empty;
             });
             app.UseRouting();

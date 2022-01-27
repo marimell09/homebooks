@@ -15,6 +15,7 @@ namespace Infra.Data.Context
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+        public DbSet<AddressEntity> AddressEntity { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
 
@@ -25,6 +26,8 @@ namespace Infra.Data.Context
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
             modelBuilder.ApplyConfiguration(new UsersWithRolesConfig());
+
+            modelBuilder.Entity<AddressEntity>(new AddressMap().Configure);
         }
     }
 }

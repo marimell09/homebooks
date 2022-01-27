@@ -22,7 +22,7 @@ namespace CrossCutting.DependencyInjection
         public static void ConfigureDependencyRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            //serviceCollection.AddScoped<IUserRepository, UserImplementation>();
+            serviceCollection.AddScoped<IAddressRepository, AddressImplementation>();
 
    
 

@@ -17,7 +17,7 @@ namespace Domain.Models
             get { return _createAt; }
             set
             {
-                _createAt = (value == null ? DateTime.UtcNow : value);
+                _createAt =  DateTime.UtcNow;
             }
         }
 

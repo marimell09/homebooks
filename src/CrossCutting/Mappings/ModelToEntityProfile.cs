@@ -15,6 +15,9 @@ namespace CrossCutting.Mappings
         {
             CreateMap<ApplicationUser, UserModel>()
               .ReverseMap();
+
+            CreateMap<AddressEntity, AddressModel>()
+                .ReverseMap();
         }
     }
 }

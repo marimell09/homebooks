@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -19,5 +20,8 @@ namespace Domain.Entities
             set { _createdAt = (value == null ? DateTime.UtcNow : value); }
         }
         public DateTime? UpdatedAt { get; set; }
+
+        public IEnumerable<AddressEntity> Addresses { get; set; }
+
     }
 }
