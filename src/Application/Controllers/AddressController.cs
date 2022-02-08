@@ -1,7 +1,7 @@
-﻿using CrossCutting.Exceptions;
-using Domain.Dtos.Address;
+﻿using Domain.Dtos.Address;
 using Domain.Entities;
 using Domain.Interfaces.Address;
+using Domain.Interfaces.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,13 +26,11 @@ namespace Application.Controllers
     {
 
         private IAddressService _service;
-        private readonly UserManager<ApplicationUser> _userManager;
         private ILogger<AddressController> _logger;
 
         public AddressController(IAddressService service, UserManager<ApplicationUser> userManager, ILogger<AddressController> logger)
         {
             _service = service;
-            _userManager = userManager;
             _logger = logger;
         }
 

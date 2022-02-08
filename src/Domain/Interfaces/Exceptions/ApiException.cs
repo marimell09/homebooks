@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrossCutting.Exceptions
+namespace Domain.Interfaces.Exceptions
 {
     public class ApiException : Exception
     {
