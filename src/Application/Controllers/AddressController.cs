@@ -84,7 +84,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
             }
             catch (ArgumentException e)
@@ -112,7 +112,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
             }
             catch (ArgumentException e)
@@ -139,7 +139,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
             }
             catch (ArgumentException e)
@@ -166,7 +166,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
             }
             catch (ArgumentException e)
@@ -192,7 +192,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
             }
             catch (ArgumentException e)
@@ -208,7 +208,7 @@ namespace Application.Controllers
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Reason = "The user is not allowed to perform this action."
+                    Message = "The user is not allowed to perform this action."
                 };
             }
         }
@@ -220,7 +220,7 @@ namespace Application.Controllers
             {
                 throw new ApiException {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "The user is not allowed to perform this action."
+                    Message = "The user is not allowed to perform this action."
                 };
             }
         }

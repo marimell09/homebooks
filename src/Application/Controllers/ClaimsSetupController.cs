@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Interfaces.Exceptions;
+using Domain.Interfaces.User;
 using Domain.Security;
 using Infra.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -19,62 +22,56 @@ namespace Application.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClaimsSetupController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _applicationContext;
-        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
-        private readonly ILogger<AuthManagementController> _logger;
 
-        public ClaimsSetupController(
-            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole<Guid>> roleManager,
-            ILogger<AuthManagementController> logger,
-            ApplicationDbContext applicationContext)
+        private IClaimsService _service;
+        private ILogger<ClaimsSetupController> _logger;
+
+        public ClaimsSetupController(IClaimsService service, ILogger<ClaimsSetupController> logger)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _applicationContext = applicationContext;
+            _service = service;
             _logger = logger;
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAllClaims(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user == null)
+            try
             {
-                _logger.LogInformation($"The user with {email} does not exist");
-                return BadRequest(new { error = "User does not exist" });
+                var userClaims = await _service.GetAllClaims(email);
+                return Ok(userClaims);
             }
+            catch (ApiException apiExc)
+            {
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            return Ok(userClaims);
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogInformation(e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
         [HttpPost]
         [Route("AddClaimsToUser")]
         public async Task<IActionResult> AddClaimsToUser(string email, string claimName, string claimValue)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user == null)
+            try
             {
-                _logger.LogInformation($"The user with {email} does not exist");
-                return BadRequest(new { error = "User does not exist" });
+                var user = await _service.AddClaimsToUser(email, claimName, claimValue);
+                return NoContent();
             }
-
-            var userClaim = new Claim(claimName, claimValue);
-            var result = await _userManager.AddClaimAsync(user, userClaim);
-
-            if (result.Succeeded)
+            catch (ApiException apiExc)
             {
-                return Ok(new
-                {
-                    result = $"User {user.Email} has a claim {claimName} added to them"
-                });
+                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
 
             }
-            return BadRequest(new { error = $"Unable to add claim {claimName} to the user {user.Email}" });
+            catch (ArgumentException e)
+            {
+                _logger.LogInformation(e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
     }

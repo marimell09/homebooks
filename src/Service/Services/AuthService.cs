@@ -60,7 +60,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "Email already in use."
+                    Message = "Email already in use."
                 };
             }
 
@@ -71,7 +71,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "Username already in use"
+                    Message = "Username already in use"
                 };
             }
 
@@ -101,8 +101,8 @@ namespace Service.Services
             {
                 throw new ApiException
                 {
-                    StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "User creation did not succeed."
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Message = "User creation did not succeed."
                 };
             }
         }
@@ -116,7 +116,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "Invalid login request."
+                    Message = "Invalid login request."
                 };
             }
 
@@ -126,7 +126,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "Invalid login request."
+                    Message = "Invalid login request."
                 };
             }
 
@@ -142,7 +142,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "Invalid token."
+                    Message = "Invalid token."
                 };
             }
 
