@@ -75,9 +75,6 @@ namespace Application
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-            var signingConfigurations = new SigningConfigurations();
-            services.AddSingleton(signingConfigurations);
-
             services.AddAuthentication(authOptions =>
             {
                 authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
