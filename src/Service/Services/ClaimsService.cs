@@ -20,19 +20,13 @@ namespace Service.Services
     {
 
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ApplicationDbContext _applicationContext;
-        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly ILogger<ClaimsService> _logger;
 
         public ClaimsService(
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole<Guid>> roleManager,
-            ILogger<ClaimsService> logger,
-            ApplicationDbContext applicationContext)
+            ILogger<ClaimsService> logger)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
-            _applicationContext = applicationContext;
             _logger = logger;
         }
 
@@ -47,7 +41,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.NotFound,
-                    Message = "User does not exist."
+                    newMessage = "User does not exist."
                 };
             }
 
@@ -65,7 +59,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.NotFound,
-                    Message = "User does not exist."
+                    newMessage = "User does not exist."
                 };
             }
 
@@ -78,7 +72,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    Message = $"Unable to add claim {claimName} to the user {user.Email}."
+                    newMessage = $"Unable to add claim {claimName} to the user {user.Email}."
                 };
             }
 

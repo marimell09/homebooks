@@ -31,7 +31,6 @@ namespace Service.Services
         private readonly TokenValidationParameters _tokenValidationParams;
         private readonly ApplicationDbContext _applicationContext;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
-        private readonly ILogger<AuthService> _logger;
 
 
         public AuthService(
@@ -39,7 +38,6 @@ namespace Service.Services
             RoleManager<IdentityRole<Guid>> roleManager,
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParams,
-            ILogger<AuthService> logger,
             ApplicationDbContext applicationContext
         )
         {
@@ -48,7 +46,6 @@ namespace Service.Services
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParams = tokenValidationParams;
             _applicationContext = applicationContext;
-            _logger = logger;
         }
 
         public async Task<AuthResult> Register(UserRegistrationDto user)
@@ -60,7 +57,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Message = "Email already in use."
+                    newMessage = "Email already in use."
                 };
             }
 
@@ -71,7 +68,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Message = "Username already in use"
+                    newMessage = "Username already in use"
                 };
             }
 
@@ -102,7 +99,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    Message = "User creation did not succeed."
+                    newMessage = "User creation did not succeed."
                 };
             }
         }
@@ -116,7 +113,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Message = "Invalid login request."
+                    newMessage = "Invalid login request."
                 };
             }
 
@@ -126,7 +123,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Message = "Invalid login request."
+                    newMessage = "Invalid login request."
                 };
             }
 
@@ -142,7 +139,7 @@ namespace Service.Services
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Message = "Invalid token."
+                    newMessage = "Invalid token."
                 };
             }
 
@@ -225,6 +222,12 @@ namespace Service.Services
             }
 
             return claims;
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            return users;
         }
 
         private string RandomString(int length)

@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace Application.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] //api/claims
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
     public class ClaimsSetupController : ControllerBase
     {
 
@@ -43,7 +43,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -64,7 +64,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)

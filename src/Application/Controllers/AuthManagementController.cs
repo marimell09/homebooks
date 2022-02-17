@@ -1,29 +1,18 @@
 ﻿using Domain.Dtos;
 using Domain.Dtos.Token;
 using Domain.Dtos.User;
-using Domain.Entities;
 using Domain.Interfaces.Exceptions;
 using Domain.Interfaces.User;
-using Domain.Security;
-using Infra.Data.Context;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Controllers
 {
-    [Route("api/[controller]")] // api/management
+    [Route("api/[controller]")] // api/AuthManagement
     [ApiController]
     public class AuthManagementController : ControllerBase
     {
@@ -53,7 +42,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -81,7 +70,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -107,7 +96,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -116,6 +105,15 @@ namespace Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
 
+        }
+
+        [HttpGet]
+        [Route("GetAllUsers")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _service.GetAllUsers();
+            return Ok(users);
         }
 
     }

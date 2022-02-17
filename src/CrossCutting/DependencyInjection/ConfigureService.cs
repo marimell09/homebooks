@@ -18,6 +18,7 @@ namespace CrossCutting.DependencyInjection
             serviceCollection.AddTransient<ILoginService, LoginService>();
             serviceCollection.AddTransient<IAuthService, AuthService>();
             serviceCollection.AddTransient<IClaimsService, ClaimsService>();
+            serviceCollection.AddTransient<IRoleService, RoleService>();
         }
     }
 }

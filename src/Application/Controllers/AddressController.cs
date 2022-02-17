@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Application.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] //api/address
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AddressController : ControllerBase
@@ -55,7 +55,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -84,7 +84,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -112,7 +112,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -139,7 +139,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -166,7 +166,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -192,7 +192,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -208,7 +208,7 @@ namespace Application.Controllers
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Message = "The user is not allowed to perform this action."
+                    newMessage = "The user is not allowed to perform this action."
                 };
             }
         }
@@ -220,7 +220,7 @@ namespace Application.Controllers
             {
                 throw new ApiException {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Message = "The user is not allowed to perform this action."
+                    newMessage = "The user is not allowed to perform this action."
                 };
             }
         }
