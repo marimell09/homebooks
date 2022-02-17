@@ -5,12 +5,12 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrossCutting.Exceptions
+namespace Domain.Interfaces.Exceptions
 {
     public class ApiException : Exception
     {
         public HttpStatusCode StatusCode { get; set; }
-        public string Reason { get; set; }
+        public string newMessage { get; set; }
         public string ResponseBody { get; set; }
     }
 }

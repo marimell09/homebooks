@@ -1,7 +1,7 @@
-﻿using CrossCutting.Exceptions;
-using Domain.Dtos.Address;
+﻿using Domain.Dtos.Address;
 using Domain.Entities;
 using Domain.Interfaces.Address;
+using Domain.Interfaces.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,20 +19,18 @@ using System.Threading.Tasks;
 
 namespace Application.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] //api/address
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AddressController : ControllerBase
     {
 
         private IAddressService _service;
-        private readonly UserManager<ApplicationUser> _userManager;
         private ILogger<AddressController> _logger;
 
         public AddressController(IAddressService service, UserManager<ApplicationUser> userManager, ILogger<AddressController> logger)
         {
             _service = service;
-            _userManager = userManager;
             _logger = logger;
         }
 
@@ -57,7 +55,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Message);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -86,7 +84,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -114,7 +112,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -141,7 +139,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -168,7 +166,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -194,7 +192,7 @@ namespace Application.Controllers
             }
             catch (ApiException apiExc)
             {
-                return StatusCode((int)apiExc.StatusCode, apiExc.Reason);
+                return StatusCode((int)apiExc.StatusCode, apiExc.newMessage);
 
             }
             catch (ArgumentException e)
@@ -210,7 +208,7 @@ namespace Application.Controllers
                 throw new ApiException
                 {
                     StatusCode = HttpStatusCode.BadRequest,
-                    Reason = "The user is not allowed to perform this action."
+                    newMessage = "The user is not allowed to perform this action."
                 };
             }
         }
@@ -222,7 +220,7 @@ namespace Application.Controllers
             {
                 throw new ApiException {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Reason = "The user is not allowed to perform this action."
+                    newMessage = "The user is not allowed to perform this action."
                 };
             }
         }
